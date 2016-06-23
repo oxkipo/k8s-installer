@@ -1,12 +1,12 @@
 #!/bin/bash -e
 
 print_help() {
-  echo "Usage: 
+  echo "Usage:
   ./kube-installer.sh
 
   Options:
     --master <master ip address>                       Install kube master with provided IP
-    --slave  <slave ip address> <master ip address>    Install kube slave with provided IP 
+    --slave  <slave ip address> <master ip address>    Install kube slave with provided IP
   "
 }
 
@@ -43,15 +43,15 @@ echo "####################################################################"
 echo "#################### Installing kubernetes $INSTALLER_TYPE #########"
 echo "####################################################################"
 
-export KUBERNETES_RELEASE_VERSION=v1.0.1
-export ETCD_VERSION=v2.0.5
+export KUBERNETES_RELEASE_VERSION=v1.2.4
+export ETCD_VERSION=v2.3.7
 export DEFAULT_CONFIG_PATH=/etc/default
 export ETCD_EXECUTABLE_LOCATION=/usr/bin
 export FLANNEL_EXECUTABLE_LOCATION=/usr/bin
 export ETCD_PORT=4001
 export FLANNEL_SUBNET=10.100.0.0/16
-export FLANNEL_VERSION=0.5.2
-export DOCKER_VERSION=1.6.2
+export FLANNEL_VERSION=0.5.5
+export DOCKER_VERSION=1.11.2
 export KUBERNETES_CLUSTER_ID=k8sCluster
 export KUBERNETES_DOWNLOAD_PATH=/tmp
 export KUBERNETES_EXTRACT_DIR=$KUBERNETES_DOWNLOAD_PATH/kubernetes
@@ -116,7 +116,7 @@ clear_network_entities() {
 
 download_flannel_release() {
   echo 'Downloading flannel release version: $FLANNEL_VERSION'
- 
+
   cd $KUBERNETES_DOWNLOAD_PATH
   flannel_download_url="https://github.com/coreos/flannel/releases/download/v$FLANNEL_VERSION/flannel-$FLANNEL_VERSION-linux-amd64.tar.gz";
   sudo curl --max-time 180 -L $flannel_download_url -o flannel.tar.gz;
@@ -208,7 +208,7 @@ update_slave_configs() {
 }
 
 remove_redundant_config() {
-  # remove the config files for redundant services so that they 
+  # remove the config files for redundant services so that they
   # dont boot up if server restarts
   if [[ $INSTALLER_TYPE == 'master' ]]; then
     echo 'removing redundant service configs for master ...'
@@ -284,7 +284,7 @@ update_flanneld_subnet() {
     echo 'Updated flanneld subnet in etcd'
   else
     echo 'Failed to flanneld subnet in etcd'
-  fi  
+  fi
 }
 
 check_service_status() {
