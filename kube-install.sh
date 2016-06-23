@@ -51,6 +51,7 @@ export FLANNEL_EXECUTABLE_LOCATION=/usr/bin
 export ETCD_PORT=4001
 export FLANNEL_SUBNET=10.100.0.0/16
 export FLANNEL_VERSION=0.5.5
+export DOCKER_VERSION=1.6.2
 export KUBERNETES_CLUSTER_ID=k8sCluster
 export KUBERNETES_DOWNLOAD_PATH=/tmp
 export KUBERNETES_EXTRACT_DIR=$KUBERNETES_DOWNLOAD_PATH/kubernetes
@@ -91,9 +92,13 @@ install_etcd() {
 }
 
 install_docker() {
-  echo "Installing latest docker version ..."
-  sudo apt-get -yy update
-  wget -qO- https://get.docker.com/ | sh
+    echo "Installing docker version $DOCKER_VERSION ..."
+    sudo apt-get -yy update
+    echo "deb http://get.docker.com/ubuntu docker main" | sudo tee /etc/apt/sources.list.d/docker.list
+    sudo apt-key adv --keyserver pgp.mit.edu --recv-keys 36A1D7869245C8950F966E92D8576A8BA88D21E9
+    sudo apt-get -yy update
+    sudo apt-get -o Dpkg::Options::='--force-confnew' -yy install lxc-docker-$DOCKER_VERSION
+    sudo service docker stop || true
 }
 
 install_prereqs() {
